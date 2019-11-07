@@ -1,13 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import { auth } from '../../firebase/firebase.utils';
-
 import { ReactComponent as Logo } from '../../assets/crown.svg';
-
 import './header.styles.scss';
+import CartIcon from '../cart-icon/cart-icon.component';
+import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 
-const Header = ({ currentUser }) => (
+
+// the currentUser is now available to us as props because we've called mapStateToProps. infact anywhere we need data from our smaller reducers, we use connect and mapStateToProps.
+
+// destructure and get currentUser from props. use this.props when in a class component instead.
+const Header = ({currentUser, hidden}) => (
+  
   <div className='header'>
     <Link className='logo-container' to='/'>
       <Logo className='logo' />
@@ -19,7 +25,7 @@ const Header = ({ currentUser }) => (
       <Link className='option' to='/shop'>
         CONTACT
       </Link>
-      {currentUser ? (
+      {true ? (
         <div className='option' onClick={() => auth.signOut()}>
           SIGN OUT
         </div>
@@ -28,8 +34,16 @@ const Header = ({ currentUser }) => (
           SIGN IN
         </Link>
       )}
+      <CartIcon /> 
     </div>
+    { hidden ? null : <CartDropdown/> }
   </div>
 );
 
-export default Header;
+// state here refers to the object in our rootReducer. The currentUser is destructured from the user and the user from the state. same as in cart and hidden.
+const mapStateToProps = ({user: {currentUser}, cart: {hidden}}) => ({
+  currentUser,
+  hidden  
+});
+
+export default connect(mapStateToProps)(Header);

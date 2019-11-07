@@ -1,8 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import './collection-item.styles.scss';
+import CustomButton from '../custom-button/custom-button.component';
+import { addItem } from '../../redux/cart/cart.action';
 
-const CollectionItem = ({ id, name, price, imageUrl }) => (
+const CollectionItem = ({ item, addItem }) => {
+  const { name, imageUrl, price } = item;
+
+  return (
   <div className='collection-item'>
     <div
       className='image'
@@ -14,7 +20,13 @@ const CollectionItem = ({ id, name, price, imageUrl }) => (
       <span className='name'>{name}</span>
       <span className='price'>{price}</span>
     </div>
+    <CustomButton inverted onClick={() => addItem(item)}>Add to cart</CustomButton>
   </div>
-);
+)};
 
-export default CollectionItem;
+// the addItem key and the addItem that receives item as an argument are not the same. Same names are only used to show we're executing the same action/doing the same thing.
+const mapDispatchToProps = (dispatch) => ({
+  addItem: (item) => dispatch(addItem(item))
+});
+
+export default connect(null, mapDispatchToProps)(CollectionItem);
