@@ -12,4 +12,3 @@ export const addItemToCart = (cartItems, cartItemToAdd) => {
   // cartItems is an array of objects, we modify one of these objects inside it( by adding a quantity key)
   return [...cartItems, { ...cartItemToAdd, quantity: 1} ]
 } 
-
